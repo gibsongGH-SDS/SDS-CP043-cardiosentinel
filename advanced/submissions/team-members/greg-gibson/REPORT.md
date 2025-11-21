@@ -56,40 +56,63 @@ A:  Patient ID and Blood Pressure are out, nine features are already binary and 
 
 🏷️ 1. Feature Encoding  
 Q: Identify binary categorical features (e.g., Smoking, AlcoholConsumption) and apply simple encoding. Which features did you encode?  
-A:  
+A: Diabetes, Family History, Smoking, Obesity, Alcohol Consumption, Previous Heart Problems, Medication Use, Sex and Hemisphere.  Most are already in 0/1 format, except Sex which I encoded and Hemisphere which I dropped as redundant to Country.
 
 Q: Apply ordinal encoding to lifestyle variables with ranked categories (e.g., Diet quality or PhysicalActivity frequency). What order did you assign, and why?  
-A:  
+A: I did not ordinally encode any variables.  Stress Level, Physical Activity, and Sleep Hours are already ordinal, and Diet was one hot encoded as I do not know whether it is a linear progression.
 
 Q: For remaining nominal categorical features, apply one-hot encoding. Why is one-hot encoding preferable for non-ordinal categories?  
-A:  
+A: I applied OHE to Diet and Country, as their are limited choices and you cannot calculate "how much better".  I dropped Continent and Hemisphere as over-representative.
 
 ✨ 2. Feature Creation  
 Q: Create a new feature `BMI_Category` (Underweight, Normal, Overweight, Obese) based on BMI ranges. Display its value counts.  
-A:  
+A:              count  percent
+BMI_Category                
+Obese          3881    44.29
+Normal         2619    29.89
+Overweight     2059    23.50
+Underweight     204     2.33  
 
 Q: Create a `Risk_Index` feature using the formula `(Cholesterol + BloodPressure) / ExerciseHours`. Explain the rationale behind this derived metric.  
-A:  
+A: This combines health, strain and lifestyle, and can compare high cholesterol and blood pressure in a healthy person who offsets the risk with plenty of exercise vs someone who does not. 
 
 Q: Did either of the engineered features show a visible relationship with heart-attack risk?  
-A:  
+A: Not clearly.  Risk_Index for 0 or 1 indicators of heart attack risk were very similar, and while Underweight BMI showed lowest risk, Normal BMI, surprisingly, was higher than Obese or Overweight.
 
 ✂️ 3. Data Splitting  
 Q: Split your dataset into training and testing sets (80/20 recommended). Use stratification on the Heart_Attack_Risk target.  
-A:  
+A: (Turning into a question) Stratification is used to ensure the target column is represented in the same proportions when randomly separated into training and test.
 
 Q: Why must the dataset be split before applying SMOTE or scaling techniques?  
-A:  
+A: To prevent data leakage - you must scale or SMOTE (create synthetic records) using only on the training dataset, so that the test data is truly unseen to evaluate model performance. 
 
 Q: Show the shape of your X_train, X_test, y_train, and y_test arrays to confirm the split.  
-A:  
+A:  X_train.shape, X_test.shape, y_train.shape, y_test.shape, y_train.mean(), y_test.mean()
+((7010, 63),
+ (1753, 63),
+ (7010,),
+ (1753,),
+ np.float64(0.358),
+ np.float64(0.358))
 
 ⚖️ 4. Imbalance Handling & Final Preprocessing  
 Q: Apply the SMOTE technique (or class weighting) on the training set to handle imbalance. Show the class distribution before and after resampling.  
-A:  
+A: Class distribution BEFORE weighting:
+Training set:
+Heart Attack Risk
+0    0.642
+1    0.358
+
+Test set:
+Heart Attack Risk
+0    0.642
+1    0.358
+
+Computed class weights (used during training):
+{np.int64(0): np.float64(0.7790620137808402), np.int64(1): np.float64(1.395858223815213)}
 
 Q: Normalize numerical features using StandardScaler (fit on training data only). Why must you not fit the scaler on the test set?  
-A:  
+A: To avoid data leakage and keep the test set truly unseen, the test set cannot impact how data is scaled.
 
 Q: Display the final shape of your preprocessed training (X_train_processed) and testing (X_test_processed) feature matrices.  
-A:  
+A: Class weighting does not rebalance the dataset, it rebalances the loss function during training.
