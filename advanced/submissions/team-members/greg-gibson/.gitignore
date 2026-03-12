@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# AI tooling
+.claude/
+
+# Standard builds
+dist/
+build/
+*.egg-info/
+
+# Environments
+.venv/
+.env
+
+# Local datasets
+data/
+!data/README.md
+
+# Experiments & outputs
+mlruns/
+outputs/
+
+# Private notes
+notes/
